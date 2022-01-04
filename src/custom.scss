@@ -1,0 +1,42 @@
+// $body-bg: rgb(46, 46, 46);
+// $body-color: #111;
+
+$primary: rgb(111, 31, 128);
+$primary-l1: rgb(220, 75, 253);
+$primary-l2: rgb(159, 19, 190);
+$secondary: rgb(46, 125, 136);
+// $success: #fff;
+// $warning:#fff;
+// $danger:#fff;
+// $info:#fff;
+$light:rgb(255, 255, 255);
+$grey:rgb(204, 204, 204);
+$grey2: rgb(153, 153, 153);
+$dar:rgb(27, 27, 27);
+$box-shadow:rgb(114, 114, 114);
+
+.card {
+    padding: 15px;
+    box-shadow: 1px 1px 2px $box-shadow;
+}
+.router-link {
+    text-decoration: none !important;
+}
+.route-active {
+    color: $primary-l1;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.route-inactive {
+    color: $primary-l2;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.card-img-top {
+    width: auto;
+    height: 15vh;
+    object-fit: cover;
+}
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
