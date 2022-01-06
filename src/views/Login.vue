@@ -47,8 +47,8 @@ export default {
     async loginUser() {
       await Auth.userLogin(this.form.username, this.form.password)
       .then((response) => {
-        console.log("response.status: ", response.status);
-        Auth.registerUserLogin(this.form.username, this.form.password);
+        console.log("response.status: ", response);
+        Auth.registerUserLogin(this.form.username, response.data.token);
         this.$router.push('dashboard');
       })
       .catch(() => {

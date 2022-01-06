@@ -1,44 +1,40 @@
 // import axios from 'axios';
 import axios from '../http-common'
 import store from '../store'
+let LOCAL_STORAGE_VARIABLE = 'loggedInUserDataEntryApp';
 
 class AuthenticationService {
     
     userLogin(username = null, password = null) {
-        return axios.get('/basicauth', {
-            headers: {
-                Authorization: this.getBasicAuthToken(username, password)
-            }
-        });
+        return axios.post('/authenticate', { username, password });
     }
-    registerUserLogin(username, password) {
+    registerUserLogin(username, JWTtoken) {
         store.dispatch('registerUser', {
             username: username,
-            token: this.getBasicAuthToken(username, password)
+            token: JWTtoken
         });
-        localStorage.setItem('loggedInUserDataEntryApp', username);
-        this.APIinterceptors(store.getters.getUserInfo.token);
+        localStorage.setItem(LOCAL_STORAGE_VARIABLE, JSON.stringify({ username: username, token: JWTtoken }));
+        this.APIinterceptors(this.getAuthToken(JWTtoken));
     }
-    getBasicAuthToken(username, password) {
-        let basicAuthHeader = 'Basic ' + btoa(username + ':' + password);
-        return basicAuthHeader;
+    getAuthToken(token) {
+        return 'Bearer ' + token;
     }
     logout() {
         store.dispatch('logOutUser');
-        localStorage.removeItem('loggedInUserDataEntryApp');
+        localStorage.removeItem(LOCAL_STORAGE_VARIABLE);
     }
     getUserLoggedIn() {
         console.log("Inside getUserLoggedIn");
-        let user = localStorage.getItem('loggedInUserDataEntryApp');
+        let user = JSON.parse(localStorage.getItem(LOCAL_STORAGE_VARIABLE));
         if(user == null) return '';
         else return user;
     }
-    APIinterceptors(basicAuthHeader) {        
+    APIinterceptors(authToken) {        
         axios.interceptors.request.use((config) => {
             // Do something before request is sent
-            console.log("API Interceptor called!", config);
+            console.log("API Interceptor called!", JSON.parse(localStorage.getItem(LOCAL_STORAGE_VARIABLE)));
             if(store.state.user) {
-                config.headers.Authorization = basicAuthHeader;
+                config.headers.Authorization = authToken;
             }
             return config;
         }, (error) => {
